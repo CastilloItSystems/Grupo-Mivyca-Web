@@ -1,0 +1,42 @@
+# Dockerfile para Backend NestJS
+FROM node:18-alpine AS builder
+
+WORKDIR /app
+
+# Copiar archivos de configuración
+COPY backend/package*.json ./
+COPY backend/tsconfig*.json ./
+COPY backend/nest-cli.json ./
+
+# Instalar dependencias
+RUN npm ci --only=production && npm cache clean --force
+
+# Copiar código fuente
+COPY backend/src ./src
+COPY backend/prisma ./prisma
+
+# Generar Prisma Client
+RUN npx prisma generate
+
+# Compilar aplicación
+RUN npm run build
+
+# Etapa de producción
+FROM node:18-alpine AS runner
+
+WORKDIR /app
+
+# Copiar archivos necesarios desde builder
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/package*.json ./
+
+# Crear usuario no-root
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nestjs
+
+USER nestjs
+
+EXPOSE 3001
+
+CMD ["node", "dist/main"]

@@ -1,0 +1,146 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Company {
+  id              String              @id @default(cuid())
+  name            String              @unique
+  slug            String              @unique
+  description     String?
+  logo            String?
+  isActive        Boolean             @default(true)
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+  orders          Order[]
+  products        Product[]
+  userAccess      UserCompanyAccess[]
+  defaultForUsers User[]              @relation("DefaultCompany")
+  vehicles        Vehicle[]
+
+  @@map("companies")
+}
+
+model User {
+  id               String              @id @default(cuid())
+  email            String              @unique
+  password         String
+  firstName        String
+  lastName         String
+  isActive         Boolean             @default(true)
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  avatar           String?
+  defaultCompanyId String?
+  emailVerified    Boolean             @default(false)
+  lastLoginAt      DateTime?
+  companyAccess    UserCompanyAccess[]
+  defaultCompany   Company?            @relation("DefaultCompany", fields: [defaultCompanyId], references: [id])
+
+  @@map("users")
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  sku         String   @unique
+  price       Decimal  @db.Decimal(10, 2)
+  stock       Int      @default(0)
+  category    String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  companyId   String
+  company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@map("products")
+}
+
+model Vehicle {
+  id        String        @id @default(cuid())
+  plate     String        @unique
+  brand     String
+  model     String
+  year      Int
+  type      VehicleType
+  status    VehicleStatus @default(AVAILABLE)
+  fuelType  String?
+  capacity  String?
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  companyId String
+  company   Company       @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@map("vehicles")
+}
+
+model Order {
+  id            String      @id @default(cuid())
+  orderNumber   String      @unique
+  total         Decimal     @db.Decimal(10, 2)
+  status        OrderStatus @default(PENDING)
+  customerName  String
+  customerEmail String?
+  customerPhone String?
+  notes         String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  companyId     String
+  company       Company     @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@map("orders")
+}
+
+model UserCompanyAccess {
+  id        String   @id @default(cuid())
+  userId    String
+  companyId String
+  role      UserRole @default(USER)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, companyId])
+  @@map("user_company_access")
+}
+
+enum UserRole {
+  ADMIN
+  MANAGER
+  USER
+  GUEST
+  SUPER_ADMIN
+  SUPERVISOR
+  VIEWER
+}
+
+enum VehicleType {
+  TRUCK
+  VAN
+  CAR
+  MOTORCYCLE
+}
+
+enum VehicleStatus {
+  AVAILABLE
+  IN_USE
+  MAINTENANCE
+  OUT_OF_SERVICE
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
