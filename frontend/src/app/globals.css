@@ -1,0 +1,176 @@
+@import "tailwindcss";
+
+/* =============================================
+   VARIABLES CSS PARA SISTEMA DE THEMING
+   ============================================= */
+
+/* Variables globales base */
+:root {
+  /* Colores neutros */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-transparent: transparent;
+
+  /* Grises */
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+
+  /* Variables de tema por defecto (tema claro) */
+  --bg-primary: var(--color-white);
+  --bg-secondary: var(--color-gray-50);
+  --bg-tertiary: var(--color-gray-100);
+  --text-primary: var(--color-gray-900);
+  --text-secondary: var(--color-gray-600);
+  --text-tertiary: var(--color-gray-400);
+  --border-primary: var(--color-gray-200);
+  --border-secondary: var(--color-gray-300);
+
+  /* Colores de estado */
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+
+  /* Variables de empresa por defecto */
+  --company-primary: #2563eb;
+  --company-secondary: #1d4ed8;
+  --company-accent: #60a5fa;
+  --company-name: "Default";
+}
+
+/* =============================================
+   TEMAS POR EMPRESA
+   ============================================= */
+
+/* Tema Almivyca (Azul) */
+.theme-almivyca {
+  --company-primary: #0ea5e9;
+  --company-secondary: #0284c7;
+  --company-accent: #38bdf8;
+  --company-gradient: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  --company-name: "Almivyca";
+}
+
+/* Tema Transmivyca (Verde) */
+.theme-transmivyca {
+  --company-primary: #10b981;
+  --company-secondary: #059669;
+  --company-accent: #34d399;
+  --company-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  --company-name: "Transmivyca";
+}
+
+/* Tema CAMABAR (Rojo) */
+.theme-camabar {
+  --company-primary: #ef4444;
+  --company-secondary: #dc2626;
+  --company-accent: #f87171;
+  --company-gradient: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  --company-name: "CAMABAR";
+}
+
+/* =============================================
+   TEMA OSCURO
+   ============================================= */
+
+.dark {
+  --bg-primary: var(--color-gray-900);
+  --bg-secondary: var(--color-gray-800);
+  --bg-tertiary: var(--color-gray-700);
+  --text-primary: var(--color-gray-100);
+  --text-secondary: var(--color-gray-300);
+  --text-tertiary: var(--color-gray-500);
+  --border-primary: var(--color-gray-700);
+  --border-secondary: var(--color-gray-600);
+
+  /* Ajustar colores de empresa para tema oscuro */
+  --company-accent: color-mix(in srgb, var(--company-primary) 80%, white 20%);
+}
+
+/* =============================================
+   ESTILOS GLOBALES
+   ============================================= */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+/* Clases de utilidad personalizadas */
+.btn-primary {
+  background-color: #2563eb;
+  color: white;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: #1d4ed8;
+}
+
+.btn-secondary {
+  background-color: #e5e7eb;
+  color: #374151;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s;
+}
+
+.btn-secondary:hover {
+  background-color: #d1d5db;
+}
+
+.card {
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e7eb;
+  padding: 1.5rem;
+}
+
+/* Clases temáticas por empresa */
+.mivyca-button-almivyca {
+  background-color: #0284c7;
+  border-color: #0284c7;
+}
+
+.mivyca-button-almivyca:hover {
+  background-color: #0369a1;
+}
+
+.mivyca-button-transmivyca {
+  background-color: #059669;
+  border-color: #059669;
+}
+
+.mivyca-button-transmivyca:hover {
+  background-color: #047857;
+}
+
+.mivyca-button-camabar {
+  background-color: #dc2626;
+  border-color: #dc2626;
+}
+
+.mivyca-button-camabar:hover {
+  background-color: #b91c1c;
+}

@@ -5,7 +5,7 @@ import { UserRole } from "@prisma/client";
 export class AddCompanyAccessDto {
   @ApiProperty({
     description: "ID de la empresa",
-    example: "clx1234567890",
+    example: "(ID real de empresa, ver respuesta de /companies)",
   })
   @IsString()
   @IsNotEmpty()

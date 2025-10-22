@@ -11,7 +11,7 @@ import {
 export class CreateUserDto {
   @ApiProperty({
     description: "Email del usuario",
-    example: "usuario@grupomivyca.com",
+    example: "manager@grupomivyca.com", // Ejemplo real del seed
   })
   @IsEmail()
   @IsNotEmpty()
@@ -19,7 +19,7 @@ export class CreateUserDto {
 
   @ApiProperty({
     description: "Contraseña del usuario",
-    example: "password123",
+    example: "admin123", // Ejemplo real del seed
     minLength: 6,
   })
   @IsString()
@@ -29,7 +29,7 @@ export class CreateUserDto {
 
   @ApiProperty({
     description: "Nombre del usuario",
-    example: "Juan",
+    example: "Roberto", // Ejemplo real del seed
   })
   @IsString()
   @IsNotEmpty()
@@ -37,7 +37,7 @@ export class CreateUserDto {
 
   @ApiProperty({
     description: "Apellido del usuario",
-    example: "Pérez",
+    example: "Manager", // Ejemplo real del seed
   })
   @IsString()
   @IsNotEmpty()
@@ -45,7 +45,7 @@ export class CreateUserDto {
 
   @ApiProperty({
     description: "ID de la empresa por defecto",
-    example: "clx1234567890",
+    example: "(ID real de empresa, ver respuesta de /companies)",
     required: false,
   })
   @IsString()
