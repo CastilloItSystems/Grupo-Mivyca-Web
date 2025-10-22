@@ -22,7 +22,7 @@ import type {
  * Hook para gestión de productos
  */
 export function useProducts() {
-  return useCrudApi(
+  return useCrudApi<import("@/types").Product>(
     (params: ProductFilters = {}) => almivycaService.getProducts(params),
     (data: CreateProductData) => almivycaService.createProduct(data),
     (id: string, data: UpdateProductData) =>
@@ -49,8 +49,8 @@ export function useStockMovements() {
     almivycaService.getStockMovements(params)
   );
 
-  const createMovement = useApi((data: StockMovementData) =>
-    almivycaService.createStockMovement(data)
+  const createMovement = useApi<import("@/types").StockMovement>(
+    (data: StockMovementData) => almivycaService.createStockMovement(data)
   );
 
   const executeMovement = useCallback(
@@ -79,11 +79,12 @@ export function useStockMovements() {
  * Hook para actualización de stock
  */
 export function useStockUpdate() {
-  const updateStock = useApi((productId: string, quantity: number) =>
-    almivycaService.updateStock(productId, quantity)
+  const updateStock = useApi<import("@/types").Product>(
+    (productId: string, quantity: number) =>
+      almivycaService.updateStock(productId, quantity)
   );
 
-  const adjustStock = useApi(
+  const adjustStock = useApi<import("@/types").Product>(
     (productId: string, newQuantity: number, reason?: string) =>
       almivycaService.adjustStock(productId, newQuantity, reason)
   );
@@ -98,20 +99,24 @@ export function useStockUpdate() {
  * Hook para reportes de inventario
  */
 export function useInventoryReports() {
-  const getReport = useApi((params: Record<string, any> = {}) =>
-    almivycaService.getInventoryReport(params)
+  const getReport = useApi<import("@/types").InventoryReport>(
+    (params: Record<string, any> = {}) =>
+      almivycaService.getInventoryReport(params)
   );
 
-  const getLowStockReport = useApi(() => almivycaService.getLowStockReport());
+  const getLowStockReport = useApi<import("@/types").Product[]>(() =>
+    almivycaService.getLowStockReport()
+  );
 
-  const getMovementReport = useApi(
+  const getMovementReport = useApi<any>(
     (startDate: string, endDate: string, productId?: string) =>
       almivycaService.getMovementReport(startDate, endDate, productId)
   );
 
-  const exportInventory = useApi(
+  const exportInventory = useCallback(
     (format: "excel" | "pdf" = "excel", filters?: ProductFilters) =>
-      almivycaService.exportInventory(format, filters)
+      almivycaService.exportInventory(format, filters),
+    []
   );
 
   return {
@@ -126,13 +131,15 @@ export function useInventoryReports() {
  * Hook para alertas de inventario
  */
 export function useInventoryAlerts() {
-  const getAlerts = usePaginatedApi(() => almivycaService.getInventoryAlerts());
-
-  const markAsRead = useApi((alertId: string) =>
-    almivycaService.markAlertAsRead(alertId)
+  const getAlerts = usePaginatedApi<import("@/types").InventoryAlert>(() =>
+    almivycaService.getInventoryAlerts()
   );
 
-  const dismissAlert = useApi((alertId: string) =>
+  const markAsRead = useApi<import("@/types").InventoryAlert>(
+    (alertId: string) => almivycaService.markAlertAsRead(alertId)
+  );
+
+  const dismissAlert = useApi<void>((alertId: string) =>
     almivycaService.dismissAlert(alertId)
   );
 
@@ -177,7 +184,10 @@ export function useInventoryAlerts() {
  * Hook para obtener estadísticas de inventario
  */
 export function useInventoryStats() {
-  return useApi(() => almivycaService.getInventoryStats(), true);
+  return useApi<import("@/types").InventoryStats>(
+    () => almivycaService.getInventoryStats(),
+    true
+  );
 }
 
 /**

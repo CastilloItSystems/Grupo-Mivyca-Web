@@ -7,16 +7,14 @@
 export { apiClient } from "./client";
 export type { ApiResponse, PaginatedResponse, RequestConfig } from "./client";
 
-// Servicios específicos por empresa
-export { almivycaService } from "./almivyca";
-export { transmivycaService } from "./transmivyca";
-export { camabarService } from "./camabar";
-
-// Importaciones para uso interno
+// Importar servicios para construir el índice y el mapa dinámico
 import { almivycaService } from "./almivyca";
 import { transmivycaService } from "./transmivyca";
 import { camabarService } from "./camabar";
 import type { CompanyId } from "@/types";
+
+// Exportar los servicios individualmente (útil para imports directos)
+export { almivycaService, transmivycaService, camabarService };
 
 // Objeto de servicios para acceso dinámico
 export const services = {

@@ -1,8 +1,3 @@
-/**
- * Servicio para la gestión de inventario de Almivyca
- * Conecta con los endpoints del backend para productos, stock, y reportes
- */
-
 import { apiClient, type ApiResponse, type PaginatedResponse } from "./client";
 import type {
   Product,
@@ -21,7 +16,7 @@ import type {
 class AlmivycaService {
   private readonly basePath = "/api/almivyca";
 
-  // === GESTIÓN DE PRODUCTOS ===
+  // === PRODUCTS ===
   async getProducts(
     params: ProductFilters = {}
   ): Promise<PaginatedResponse<Product>> {
@@ -80,7 +75,7 @@ class AlmivycaService {
     );
   }
 
-  // === GESTIÓN DE CATEGORÍAS ===
+  // === CATEGORIES ===
   async getProductCategories(): Promise<ApiResponse<ProductCategory[]>> {
     return apiClient.get<ApiResponse<ProductCategory[]>>(
       `${this.basePath}/categories`
@@ -113,16 +108,14 @@ class AlmivycaService {
     );
   }
 
-  // === GESTIÓN DE STOCK ===
+  // === STOCK ===
   async updateStock(
     productId: string,
     quantity: number
   ): Promise<ApiResponse<Product>> {
     return apiClient.post<ApiResponse<Product>>(
       `${this.basePath}/products/${productId}/stock`,
-      {
-        quantity,
-      }
+      { quantity }
     );
   }
 
@@ -133,10 +126,7 @@ class AlmivycaService {
   ): Promise<ApiResponse<Product>> {
     return apiClient.post<ApiResponse<Product>>(
       `${this.basePath}/products/${productId}/adjust-stock`,
-      {
-        newQuantity,
-        reason,
-      }
+      { newQuantity, reason }
     );
   }
 
@@ -158,7 +148,7 @@ class AlmivycaService {
     );
   }
 
-  // === REPORTES ===
+  // === REPORTS ===
   async getInventoryReport(
     params: Record<string, any> = {}
   ): Promise<ApiResponse<InventoryReport>> {
@@ -206,12 +196,11 @@ class AlmivycaService {
     return response.blob();
   }
 
-  // === ESTADÍSTICAS ===
+  // === STATS & ALERTS ===
   async getInventoryStats(): Promise<ApiResponse<InventoryStats>> {
     return apiClient.get<ApiResponse<InventoryStats>>(`${this.basePath}/stats`);
   }
 
-  // === ALERTAS ===
   async getInventoryAlerts(): Promise<PaginatedResponse<InventoryAlert>> {
     return apiClient.getPaginated<InventoryAlert>(`${this.basePath}/alerts`);
   }
@@ -229,6 +218,5 @@ class AlmivycaService {
   }
 }
 
-// Exportar instancia singleton
 export const almivycaService = new AlmivycaService();
 export default almivycaService;
